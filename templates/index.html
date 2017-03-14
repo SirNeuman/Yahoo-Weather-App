@@ -61,9 +61,10 @@
         	<div class="col-md-12 weather-panel">
         		<div class="row">
 	        		<div class="col-sm-4 clickable" ng-click="showDetails = !showDetails">
-	        			<i ng-if="!showDetails" class="fa fa-caret-right"></i> 
+	        			<i ng-if="!showDetails" class="fa fa-caret-right"></i>
+                <span ng-if="!showDetails">More Details</span>
 	        			<i ng-if="showDetails" class="fa fa-caret-down"></i>
-	        			More Details
+	        			<span ng-if="showDetails">Hide Details</span>
 	        		</div>
         		</div>
         		<div ng-show="showDetails" class="text-center">

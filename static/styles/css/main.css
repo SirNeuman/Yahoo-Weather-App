@@ -1,21 +1,23 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #F9F9F9; }
+  background-color: #8393B4;
+  color: #261100; }
   body header img {
-    max-height: 50px;
-    max-width: 40px;
-    position: absolute; }
+    max-height: 80px;
+    max-width: 60px;
+    position: absolute;
+    top: 32px; }
   body header .image-spacer {
-    width: 40px;
+    width: 60px;
     height: 50px;
     float: left; }
   body .no-padding {
     padding: 0; }
   body .weather-window {
     background-color: #B6BED5;
-    border: 1px solid black; }
+    border: 1px solid #0C1F45; }
     body .weather-window .weather-panel {
-      border: 1px solid black; }
+      border: 1px solid #0C1F45; }
       body .weather-window .weather-panel.big-panel {
         height: 169px; }
         body .weather-window .weather-panel.big-panel .weather-main-icon {

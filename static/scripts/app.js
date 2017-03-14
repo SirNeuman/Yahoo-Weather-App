@@ -265,6 +265,11 @@ angular.module('weatherApp').directive('forecastChart', function($timeout){
 				});
 
 				Highcharts.chart('forecast-chart', {
+					chart:{
+						borderWidth: 2,
+						borderColor: '#0C1F45',
+						type: 'line'
+					},
 					title: {
 						text: '7 Day Forecast',
 					},
