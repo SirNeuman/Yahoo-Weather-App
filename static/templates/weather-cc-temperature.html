@@ -1,0 +1,3 @@
+<h2 ng-if="!small">{[temp]} {[units === 'F' ? '&#x2109;' : '&#x2103;' ]}</h2>
+<h3 ng-if="small">{[temp]} {[units === 'F' ? '&#x2109;' : '&#x2103;' ]}</h3>
+<p class="sub-text" ng-class="small ? 'narrow' : ''">{[text]}</p>

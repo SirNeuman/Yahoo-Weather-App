@@ -1,0 +1,78 @@
+$primary-color: #B6BED5;
+$secondary-color: #F9F9F9;
+$tertiary-color: #465789;
+
+body{
+	font-family: 'Roboto', sans-serif;
+	background-color: $secondary-color;
+
+	header{
+		img{
+			max-height: 50px;
+			max-width: 40px;
+			position: absolute;
+		}
+		.image-spacer{
+			width: 40px;
+			height: 50px;
+			float: left;
+		}
+	}
+
+	.no-padding{
+		padding: 0;
+	}
+
+	
+	.weather-window{
+		background-color: $primary-color;
+		border: 1px solid black;
+		.weather-panel{
+			border: 1px solid black;
+			&.big-panel{
+				height: 169px;
+				.weather-main-icon{
+					margin-top: 25px;
+					font-size: 80px;
+				}
+				.text-description{
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 5px;
+					font-size: 20px;
+				}
+			}
+		}
+	}
+	// .sub-text{
+	// 	border-top: 1px solid $tertiary-color;
+	// }
+	.sub-text{
+		&.narrow::before{
+			width: 80px;
+		}
+		&::before{
+			content: " ";
+			width: 140px;
+			height: 1px;
+			background-color: $tertiary-color;
+			display: block;
+			margin: auto;
+
+		}
+	}
+	.clickable{
+		cursor: pointer;
+	}
+}
+
+.bottom-buffer{
+	margin-bottom: 20px;
+}
+
+.top-buffer{
+	margin-top: 20px;
+}
+
+

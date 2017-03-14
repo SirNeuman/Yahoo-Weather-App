@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/vendor/weather-icons.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/css/main.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <script src="{{ url_for('static', filename='scripts/vendor/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/vendor/angular.min.js') }}"></script>
+  </head>
+
+  <body>
+
+  	<div ng-app="weatherApp" class="container">
+
+      <header>
+        <div class="page-header">
+          <img src="{{url_for('static', filename='images/weather-logo.png')}}" alt="Weather">
+          <span class="image-spacer"></span>
+          <h1 class="text-center">Yahoo Weather Forecast</h1>
+        </div>
+      </header>
+
+      <div class="row bottom-buffer">
+      	<div class="col-sm-4 col-sm-offset-4" input-zipcode></div>
+      </div>
+
+      <div ng-controller="currentConditionsCtrl">
+
+        <div class="col-md-8 col-md-offset-2 weather-window no-padding">
+        	<div class="col-md-7 text-center">
+        		<div weather-cc-title time='data().item.pubTime' class="weather-panel row"></div>
+        		<div weather-cc-description class="weather-panel big-panel row" condition-code="data().item.condition.code" description="data().item.condition.text"></div>
+        	</div>
+
+        	<div class="col-md-5 text-center">
+        		<div class="weather-panel row" weather-cc-location location="data().location"></div>
+        		<div class="weather-panel row" weather-cc-temp 
+        				 text="Current Temp."
+        				 temp="data().item.condition.temp"
+        				 units="data().units.temperature">
+        		</div>
+        		<div class="row">
+	        		<div class="col-xs-6 weather-panel" weather-cc-temp
+	        				 text="High"
+	        				 temp="data().item.forecast[0].high"
+	        				 units="data().units.temperature">
+	        		</div>
+	        		<div class="col-xs-6 weather-panel" weather-cc-temp
+	        				 text="Low"
+	        				 temp="data().item.forecast[0].low"
+	        				 units="data().units.temperature">
+	        		</div>
+        		</div>
+        	</div>
+
+        	<div class="col-md-12 weather-panel">
+        		<div class="row">
+	        		<div class="col-sm-4 clickable" ng-click="showDetails = !showDetails">
+	        			<i ng-if="!showDetails" class="fa fa-caret-right"></i> 
+	        			<i ng-if="showDetails" class="fa fa-caret-down"></i>
+	        			More Details
+	        		</div>
+        		</div>
+        		<div ng-show="showDetails" class="text-center">
+              <div weather-cc-details data="data()" class="row"></div>
+	        	</div>
+        	</div>
+        </div>
+
+        <div forecast-chart data="data().item.forecast", units="data().units"></div>
+
+      </div>
+  	</div>
+  </body>
+
+  <script src="{{ url_for('static', filename='scripts/vendor/highcharts.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/vendor/moment.js')}}"></script>
+  <script src="{{ url_for('static', filename='scripts/vendor/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/vendor/lodash.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/app.js') }}"></script>
+  
+</html>
