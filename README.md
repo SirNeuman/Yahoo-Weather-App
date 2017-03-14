@@ -12,7 +12,7 @@ This application was built using the Yahoo Weather API. It is built upon the fol
 
 If you already have Flask installed globally you can run the application by running `python main.py` in your terminal. 
 
-I would recommend, however, running the application in a (virtual enviornment)[http://docs.python-guide.org/en/latest/dev/virtualenvs/]. After setting up the virtual environment just install the requirements from requirements.txt via `pip install -r requirements.txt`
+I would recommend, however, running the application in a [virtual enviornment](http://docs.python-guide.org/en/latest/dev/virtualenvs/). After setting up the virtual environment just install the requirements from requirements.txt via `pip install -r requirements.txt`
 
-Then copy and paste the output, which is the location of where it is running the app, from that command into your browser. E.G. for me it runs on localhost on port 5000 (http://127.0.0.1:5000/).
+Then copy and paste the output, which is the location of where it is running the app, from that command into your browser. E.G. for me it runs on localhost on port 5000 `(http://127.0.0.1:5000/)`.
 
