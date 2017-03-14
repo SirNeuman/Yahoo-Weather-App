@@ -24,7 +24,7 @@ angular.module('weatherApp').factory('dataFactory', function($http, $q, $rootSco
 			}
 			else{
 				var woeid = data.query.results.place.woeid;
-				var query = "select * from weather.forecast where woeid=" + woeid;
+				var query = "select * from weather.forecast where woeid=" + woeid + " and u='" + units + "'";
 				// string = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D%20' + woeid + '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
 				$http.get('https://query.yahooapis.com/v1/public/yql?format=json&q=' + query).then(function successCallback(response){
 					factory.data = response.data.query.results.channel;
@@ -111,11 +111,6 @@ angular.module('weatherApp').controller('currentConditionsCtrl', function($scope
 		return dataFactory.data;
 	};
 
-	$scope.$on('unitsUpdated', function(units){
-		console.log('hello', units);
-		$scope.units = units;
-	});
-
 	function formatDates(){
 		$scope.data().item.pubTime = moment($scope.data().item.pubDate, 'ddd, DD MMM YYYY hh:mm a zz');
 	}
@@ -127,6 +122,8 @@ angular.module('weatherApp').controller('currentConditionsCtrl', function($scope
 		}, function(error){
 			alert(error);
 		});
+		// Clear zipcode so we don't see it in the input field. Instead we see the placeholder.
+		$scope.zipcode = null;
 	}
 
 	$scope.$on('dataLoaded', function(){
@@ -206,7 +203,7 @@ angular.module('weatherApp').directive('inputZipcode', function(dataFactory){
 		restrict: 'A',
 		link: function(scope){
 			scope.submitZipcode = function(zipcode){
-				dataFactory.getData(zipcode, scope.units);
+				dataFactory.getData(scope.zipcode, scope.units);
 			};
 		},
 		templateUrl: '/static/templates/weather-cc-zipcode-input.html'
@@ -216,13 +213,10 @@ angular.module('weatherApp').directive('inputZipcode', function(dataFactory){
 angular.module('weatherApp').directive('inputHeatUnits', function(dataFactory){
 	return {
 		restrict: 'A',
-		scope: {
-			units: '='
-		},
 		link: function(scope){
-			scope.$broadcast('unitsUpdated', scope.units);
 			scope.updateUnits = function(units){
-				scope.$broadcast('unitsUpdated', units);
+				scope.units = units;
+				dataFactory.getData(scope.zipcode, scope.units);
 			};
 		},
 		templateUrl: '/static/templates/weather-cc-units-input.html'
