@@ -16,3 +16,4 @@ I would recommend, however, running the application in a [virtual enviornment](h
 
 Then copy and paste the output, which is the location of where it is running the app, from that command into your browser. E.G. for me it runs on localhost on port 5000 `(http://127.0.0.1:5000/)`.
 
+
