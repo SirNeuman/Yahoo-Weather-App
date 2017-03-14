@@ -101,9 +101,10 @@ angular.module('weatherApp').factory('weatherIcons', function(){
 });
 
 angular.module('weatherApp').controller('currentConditionsCtrl', function($scope, dataFactory, $rootScope){
-	$scope.zipcode = '10001';
+	$scope.zipcode = null;
 	$scope.images = {};
 	$scope.showDetails = false;
+	$scope.default_zipcode = '10001';
 	$scope.units = 'f';
 
 	// Use function to get data from factory for asynchronous loading of data into scope
@@ -130,7 +131,7 @@ angular.module('weatherApp').controller('currentConditionsCtrl', function($scope
 		formatDates();
 	});
 
-	initData($scope.zipcode, $scope.units);
+	initData($scope.default_zipcode, $scope.units);
 });
 
 angular.module('weatherApp').directive('weatherCcTitle', function(){
@@ -216,7 +217,11 @@ angular.module('weatherApp').directive('inputHeatUnits', function(dataFactory){
 		link: function(scope){
 			scope.updateUnits = function(units){
 				scope.units = units;
-				dataFactory.getData(scope.zipcode, scope.units);
+				var zip = scope.zipcode;
+				if (!zip){
+					zip = scope.default_zipcode;
+				}
+				dataFactory.getData(zip, scope.units);
 			};
 		},
 		templateUrl: '/static/templates/weather-cc-units-input.html'
