@@ -10,15 +10,15 @@ angular.module('weatherApp').config(function($interpolateProvider){
 angular.module('weatherApp').factory('dataFactory', function($http, $q, $rootScope){
 	var factory = {};
 
-	factory.getWOEID = function(zipcode){
+	factory.getWOEID = function(zipcode, units){
 		var query = "select woeid from geo.places where text='" + zipcode + "' limit 1";
 		return $http.get('http://query.yahooapis.com/v1/public/yql?format=json&q=' + query);
 	};
 
-	factory.getData = function(zipcode){
+	factory.getData = function(zipcode, units){
 		var deferred = $q.defer();
 
-		factory.getWOEID(zipcode).success(function(data){
+		factory.getWOEID(zipcode, units).success(function(data){
 			if (!data.query.results){
 				alert('Could not find zipcode through Yahoo Weather API. Please make sure you have a valid zipcode and try again.');
 			}
@@ -30,6 +30,7 @@ angular.module('weatherApp').factory('dataFactory', function($http, $q, $rootSco
 					factory.data = response.data.query.results.channel;
 					deferred.resolve();
 					$rootScope.$broadcast('dataLoaded');
+					console.log(response.data.query.results.channel);
 				}, function errorCallback(error){
 					deferred.reject(error);
 				});
@@ -102,20 +103,25 @@ angular.module('weatherApp').factory('weatherIcons', function(){
 angular.module('weatherApp').controller('currentConditionsCtrl', function($scope, dataFactory, $rootScope){
 	$scope.zipcode = '10001';
 	$scope.images = {};
-	$scope.test = 'hello';
 	$scope.showDetails = false;
+	$scope.units = 'f';
 
 	// Use function to get data from factory for asynchronous loading of data into scope
 	$scope.data = function(){
 		return dataFactory.data;
 	};
 
+	$scope.$on('unitsUpdated', function(units){
+		console.log('hello', units);
+		$scope.units = units;
+	});
+
 	function formatDates(){
 		$scope.data().item.pubTime = moment($scope.data().item.pubDate, 'ddd, DD MMM YYYY hh:mm a zz');
 	}
 
-	function initData(zipcode){
-		promise = dataFactory.getData(zipcode);
+	function initData(zipcode, units){
+		promise = dataFactory.getData(zipcode, units);
 		promise.then(function(){
 
 		}, function(error){
@@ -127,7 +133,7 @@ angular.module('weatherApp').controller('currentConditionsCtrl', function($scope
 		formatDates();
 	});
 
-	initData($scope.zipcode);
+	initData($scope.zipcode, $scope.units);
 });
 
 angular.module('weatherApp').directive('weatherCcTitle', function(){
@@ -200,10 +206,26 @@ angular.module('weatherApp').directive('inputZipcode', function(dataFactory){
 		restrict: 'A',
 		link: function(scope){
 			scope.submitZipcode = function(zipcode){
-				dataFactory.getData(zipcode);
+				dataFactory.getData(zipcode, scope.units);
 			};
 		},
 		templateUrl: '/static/templates/weather-cc-zipcode-input.html'
+	};
+});
+
+angular.module('weatherApp').directive('inputHeatUnits', function(dataFactory){
+	return {
+		restrict: 'A',
+		scope: {
+			units: '='
+		},
+		link: function(scope){
+			scope.$broadcast('unitsUpdated', scope.units);
+			scope.updateUnits = function(units){
+				scope.$broadcast('unitsUpdated', units);
+			};
+		},
+		templateUrl: '/static/templates/weather-cc-units-input.html'
 	};
 });
 
@@ -312,6 +334,34 @@ angular.module('weatherApp').directive('forecastChart', function($timeout){
 		},
 		template: '<div id="forecast-chart" class="col-md-8 col-md-offset-2 top-buffer bottom-buffer no-padding" style="height: 400px;"></div>'
 		
+	};
+});
+
+// Need this because the returned value for sunrise and sunset can be weird sometimes from the Yahoo API.
+// Sometimes it is missing the second digit in the display for the time (E.G. Sunset = '7:1 pm' instead of '7:10 pm')
+angular.module('weatherApp').filter('displaySunRiseSet', function(){
+	return function(timeStr) {
+		var returnStr = timeStr;
+		if (timeStr){
+			var count = 0;
+			var afterColon = false;
+			var needsInsert = false;
+			for (var i = 0; i < timeStr.length; i++){
+				if (afterColon){
+					count++;
+					if (count == 2){
+						if (timeStr[i] === ' '){
+							returnStr = timeStr.slice(0, i) + "0" + timeStr.slice(i, timeStr.length);
+						}
+						break;
+					}
+				}
+				if (timeStr[i] === ":"){
+					afterColon = true;
+				}
+			}	
+		}
+		return returnStr;
 	};
 });
 
